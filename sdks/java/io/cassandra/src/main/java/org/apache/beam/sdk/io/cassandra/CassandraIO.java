@@ -126,6 +126,9 @@ public class CassandraIO {
     abstract String password();
 
     @Nullable
+    abstract PasswordDecrypter passwordDecrypter();
+
+    @Nullable
     abstract String localDc();
 
     @Nullable
@@ -191,6 +194,16 @@ public class CassandraIO {
       return builder().setPassword(password).build();
     }
 
+    /**
+     * Specify the password decrypter used to retrieve the raw password. It delayed the decryption
+     * of the password at the time of cluster connection so the raw password will never be
+     * serialized.
+     */
+    public Read<T> withPasswordDecrypter(PasswordDecrypter passwordDecrypter) {
+      checkArgument(passwordDecrypter != null, "passwordDecrypter can not be null");
+      return builder().setPasswordDecrypter(passwordDecrypter).build();
+    }
+
     /** Specify the local DC used for the load balancing. */
     public Read<T> withLocalDc(String localDc) {
       checkArgument(localDc != null, "localDc can not be null");
@@ -252,6 +265,8 @@ public class CassandraIO {
       abstract Builder<T> setUsername(String username);
 
       abstract Builder<T> setPassword(String password);
+
+      abstract Builder<T> setPasswordDecrypter(PasswordDecrypter passwordDecrypter);
 
       abstract Builder<T> setLocalDc(String localDc);
 
@@ -338,6 +353,9 @@ public class CassandraIO {
     abstract String password();
 
     @Nullable
+    abstract PasswordDecrypter passwordDecrypter();
+
+    @Nullable
     abstract String localDc();
 
     @Nullable
@@ -398,6 +416,16 @@ public class CassandraIO {
           password != null,
           "CassandraIO.write().withPassword(password) called with " + "null password");
       return builder().setPassword(password).build();
+    }
+
+    /**
+     * Specify the password decrypter used to retrieve the raw password. It delayed the decryption
+     * of the password at the time of cluster connection so the raw password will never be
+     * serialized.
+     */
+    public Write<T> withPasswordDecrypter(PasswordDecrypter passwordDecrypter) {
+      checkArgument(passwordDecrypter != null, "passwordDecrypter can not be null");
+      return builder().setPasswordDecrypter(passwordDecrypter).build();
     }
 
     /** Specify the local DC used by the load balancing policy. */
@@ -464,6 +492,8 @@ public class CassandraIO {
       abstract Builder<T> setUsername(String username);
 
       abstract Builder<T> setPassword(String password);
+
+      abstract Builder<T> setPasswordDecrypter(PasswordDecrypter passwordDecrypter);
 
       abstract Builder<T> setLocalDc(String localDc);
 
